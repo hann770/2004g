@@ -3,18 +3,30 @@ from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, F
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column # ... and other imports
+from sqlalchemy import Column 
 
 Base = declarative_base()
 
-# Many-to-many relationship table for Group and User
-group_members_table = Table(
-    'group_members',
-    Base.metadata,
-    Column('group_id', Integer, ForeignKey('groups.id')),
-    Column('user_id', Integer, ForeignKey('users.id')),
-    Column('is_admin', Boolean, default=False)
-)
+
+# group_members_table = Table(
+#     'group_members',
+#     Base.metadata,
+#     Column('group_id', Integer, ForeignKey('groups.id')),
+#     Column('user_id', Integer, ForeignKey('users.id')),
+#     Column('is_admin', Boolean, default=False)
+# )
+class GroupMember(Base):
+    """Association object for the many-to-many relationship between User and Group."""
+    __tablename__ = 'group_members'
+    __table_args__ = {'extend_existing': True}
+    
+    group_id = Column(Integer, ForeignKey('groups.id'), primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+    is_admin = Column(Boolean, default=False)
+    remark = Column(String, nullable=True)
+   
+    group = relationship("Group", back_populates="group_memberships")
+    member = relationship("User", back_populates="group_memberships")
 
 class RecurringFrequency(enum.Enum):
     daily = "daily"
@@ -34,11 +46,12 @@ class User(Base):
 
     expenses_created = relationship("Expense", back_populates="payer")
     groups_administered = relationship("Group", back_populates="admin")
-    groups_joined = relationship("Group", secondary=group_members_table, back_populates="members")
+    groups_joined = relationship("Group", secondary="group_members", back_populates="members")
+   
+    group_memberships = relationship("GroupMember", back_populates="member")
     audit_trails = relationship("AuditTrail", back_populates="user") 
-         
-    recurring_expenses_created = relationship("RecurringExpense", back_populates="payer") 
-
+    recurring_expenses_created = relationship("RecurringExpense", back_populates="payer")
+ 
 class Group(Base):
     __tablename__ = "groups"
 
@@ -48,7 +61,9 @@ class Group(Base):
     
     admin = relationship("User", back_populates="groups_administered")
     expenses = relationship("Expense", back_populates="group")
-    members = relationship("User", secondary=group_members_table, back_populates="groups_joined")
+    members = relationship("User", secondary="group_members", back_populates="groups_joined")
+    
+    group_memberships = relationship("GroupMember", back_populates="group")
 
     audit_trails = relationship("AuditTrail", back_populates="group")
     recurring_expenses = relationship("RecurringExpense", back_populates="group")
@@ -63,17 +78,21 @@ class Expense(Base):
     
     payer_id = Column(Integer, ForeignKey("users.id"))
     group_id = Column(Integer, ForeignKey("groups.id"))
+    creator_id = Column(Integer, ForeignKey("users.id"))
 
+    creator = relationship("User", back_populates="expenses_created")
     payer = relationship("User", back_populates="expenses_created")
     group = relationship("Group", back_populates="expenses")
 
+
 class AuditTrail(Base):
     __tablename__ = "audit_trail"
+    
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     group_id = Column(Integer, ForeignKey('groups.id')) 
     expense_id = Column(Integer, ForeignKey("expenses.id", ondelete="CASCADE"))
-    recurring_expense_id = Column(Integer, ForeignKey("recurring_expenses.id", ondelete="CASCADE"), nullable=True) # Added
+    recurring_expense_id = Column(Integer, ForeignKey("recurring_expenses.id", ondelete="CASCADE"), nullable=True) 
 
     action = Column(String)  # e.g., "created", "updated", "deleted"
     old_value = Column(String, nullable=True) # Storing as a string for simplicity
@@ -83,7 +102,7 @@ class AuditTrail(Base):
     user = relationship("User")
     expense = relationship("Expense")
     group = relationship("Group", back_populates="audit_trails") 
-    recurring_expense = relationship("RecurringExpense", back_populates="audit_trails") # Added
+    recurring_expense = relationship("RecurringExpense", back_populates="audit_trails") 
 
 class RecurringExpense(Base):
     __tablename__ = "recurring_expenses"
