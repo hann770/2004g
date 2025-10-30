@@ -15,7 +15,7 @@ PROJECT-PG12/(tbf)
 ├── requirements.txt        # Python dependencies
 └── README.md               # Project documentation
 
-```
+```bash
 # Project PG12 - Documentation
 
 ## 1. System Architecture and Object-Oriented Modelling
@@ -39,8 +39,8 @@ PROJECT-PG12/(tbf)
 │ Database Layer │ ← PostgreSQL with proper indexing
 └─────────────────┘
 
-#### Core Class Diagram
-```mermaid
+**Core Class Diagram**
+
 classDiagram
     class User {
         +int id
@@ -84,7 +84,6 @@ classDiagram
 ## 1.3 Sequence Diagrams
 
 **User Registration and Authentication Flow**
-```mermaid
 sequenceDiagram
     participant U as User
     participant F as FastAPI
@@ -119,7 +118,6 @@ sequenceDiagram
 
 
 **Expense Creation and Splitting Flow**
-```mermaid
 sequenceDiagram
     participant U as User
     participant F as FastAPI
@@ -146,7 +144,6 @@ sequenceDiagram
     F-->>U: 201 Created + expense_data
 
 **Payment Processing and Balance Update Flow**
-```mermaid
 sequenceDiagram
     participant U as User
     participant F as FastAPI
@@ -173,7 +170,6 @@ sequenceDiagram
     F-->>U: 201 Created + payment_data
 
 **Audit Trail and Logging Flow**
-```mermaid
 sequenceDiagram
     participant U as User
     participant F as FastAPI
@@ -199,7 +195,6 @@ sequenceDiagram
     F-->>U: 200 OK + audit_trail
 
 Invitation Management Flow
-```mermaid
 sequenceDiagram
     participant I as Inviter
     participant F as FastAPI
