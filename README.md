@@ -84,39 +84,6 @@ classDiagram
 ## 1.3 Sequence Diagrams
 
 ### User Registration and Authentication Flow
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant F as FastAPI
-    participant A as AuthService
-    participant D as Database
-    participant C as CRUD
-
-    U->>F: POST /users/signup
-    F->>A: validate_email_format()
-    A->>C: get_user_by_email()
-    C->>D: SELECT users WHERE email
-    D-->>C: user_exists?
-    C-->>A: null (new user)
-    A->>A: hash_password()
-    A->>C: create_user()
-    C->>D: INSERT INTO users
-    D-->>C: user_created
-    C-->>A: user_object
-    A-->>F: user_created
-    F-->>U: 201 Created + user_data
-
-    U->>F: POST /token
-    F->>A: authenticate_user()
-    A->>C: get_user_by_email()
-    C->>D: SELECT users WHERE email
-    D-->>C: user_data
-    C-->>A: user_with_hash
-    A->>A: verify_password()
-    A->>A: create_access_token()
-    A-->>F: JWT_token
-    F-->>U: 200 OK + access_token
-```
 **Group Creation and Member Management Flow**
 ```mermaid
 sequenceDiagram
