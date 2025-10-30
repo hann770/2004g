@@ -1,20 +1,3 @@
-# 2004g
-A backend system for shared expense management
-```bash
-2004g/
-├── app/
-│   ├── main.py             # FastAPI app entry point and all routes
-│   ├── database.py         # Database connection and session management
-│   ├── models.py           # SQLAlchemy ORM models
-│   ├── schemas.py          # Pydantic Schemas for request and response models
-│   ├── crud.py             # CRUD operations for database models
-│   ├── auth.py             # User authentication and JWT handling
-│   └── dependencies.py     # Common dependencies, e.g., current user and DB session
-├── Dockerfile              # Docker image build file
-├── docker-compose.yml      # Docker container orchestration file
-├── requirements.txt        # Python dependencies
-└── README.md               # Project documentation
-
 A backend system for shared expense management
 
 ```bash
@@ -31,7 +14,7 @@ PROJECT-PG12/(tbf)
 ├── docker-compose.yml      # Docker container orchestration file
 ├── requirements.txt        # Python dependencies
 └── README.md               # Project documentation
-
+```
 ```bash
 # Project PG12 - Documentation
 
@@ -133,7 +116,7 @@ sequenceDiagram
     A->>A: create_access_token()
     A-->>F: JWT_token
     F-->>U: 200 OK + access_token
-
+```
 **Group Creation and Member Management Flow**
 ```mermaid
 sequenceDiagram
@@ -165,7 +148,7 @@ sequenceDiagram
     DB-->>GS: member_added
     GS-->>F: member_data
     F-->>U: 201 Created + member_data
-
+```
 **Expense Creation and Splitting Flow**
 ```mermaid
 sequenceDiagram
@@ -192,7 +175,7 @@ sequenceDiagram
     BS-->>ES: balances_set
     ES-->>F: expense_with_splits
     F-->>U: 201 Created + expense_data
-
+```
 **Payment Processing and Balance Update Flow**
 ```mermaid
 sequenceDiagram
