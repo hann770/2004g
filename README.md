@@ -202,7 +202,7 @@ sequenceDiagram
     BS-->>PS: new_balances
     PS-->>F: payment_data
     F-->>U: 201 Created + payment_data
-
+```
 **Audit Trail and Logging Flow**
 ```mermaid
 sequenceDiagram
@@ -228,7 +228,7 @@ sequenceDiagram
     DB-->>AS: audit_entries
     AS-->>F: audit_data
     F-->>U: 200 OK + audit_trail
-
+```
 Invitation Management Flow
 ```mermaid
 sequenceDiagram
@@ -275,3 +275,4 @@ sequenceDiagram
     DB-->>IS: invitation_updated
     IS-->>F: updated_invitation
     F-->>Inv: 200 OK + invitation_status
+```
