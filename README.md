@@ -245,3 +245,4 @@ sequenceDiagram
     IS-->>F: updated_invitation
     F-->>Inv: 200 OK + invitation_status
 ```
+```
