@@ -82,7 +82,6 @@ classDiagram
 
 1.3 Sequence Diagrams
 ## 1.3 Sequence Diagrams
-```mermaid
 **User Registration and Authentication Flow**
 sequenceDiagram
     participant U as User
@@ -118,7 +117,6 @@ sequenceDiagram
 
 
 **Expense Creation and Splitting Flow**
-```mermaid
 sequenceDiagram
     participant U as User
     participant F as FastAPI
@@ -145,7 +143,7 @@ sequenceDiagram
     F-->>U: 201 Created + expense_data
 
 **Payment Processing and Balance Update Flow**
-```mermaid
+
 sequenceDiagram
     participant U as User
     participant F as FastAPI
@@ -172,7 +170,6 @@ sequenceDiagram
     F-->>U: 201 Created + payment_data
 
 **Audit Trail and Logging Flow**
-```mermaid
 sequenceDiagram
     participant U as User
     participant F as FastAPI
@@ -198,7 +195,6 @@ sequenceDiagram
     F-->>U: 200 OK + audit_trail
 
 Invitation Management Flow
-```mermaid
 sequenceDiagram
     participant I as Inviter
     participant F as FastAPI
