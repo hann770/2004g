@@ -83,39 +83,41 @@ classDiagram
 1.3 Sequence Diagrams
 ## 1.3 Sequence Diagrams
 
-### User Registration and Authentication Flow
-**Group Creation and Member Management Flow**
+**User Registration and Authentication Flow**
 ```mermaid
 sequenceDiagram
     participant U as User
     participant F as FastAPI
-    participant D as Dependencies
-    participant GS as GroupService
-    participant DB as Database
+    participant A as AuthService
+    participant D as Database
+    participant C as CRUD
 
-    U->>F: POST /groups/ (with JWT)
-    F->>D: get_current_user()
-    D->>D: verify_jwt_token()
-    D-->>F: current_user
-    F->>GS: create_group(group_data, admin_id)
-    GS->>DB: INSERT INTO groups
-    DB-->>GS: group_created
-    GS->>DB: INSERT INTO group_members
-    DB-->>GS: admin_member_created
-    GS-->>F: group_with_members
-    F-->>U: 201 Created + group_data
+    U->>F: POST /users/signup
+    F->>A: validate_email_format()
+    A->>C: get_user_by_email()
+    C->>D: SELECT users WHERE email
+    D-->>C: user_exists?
+    C-->>A: null (new user)
+    A->>A: hash_password()
+    A->>C: create_user()
+    C->>D: INSERT INTO users
+    D-->>C: user_created
+    C-->>A: user_object
+    A-->>F: user_created
+    F-->>U: 201 Created + user_data
 
-    U->>F: POST /groups/{id}/members/{user_id}
-    F->>D: verify_group_admin()
-    D->>D: check_group_membership()
-    D->>D: check_admin_permission()
-    D-->>F: authorized
-    F->>GS: add_group_member()
-    GS->>DB: INSERT INTO group_members
-    DB-->>GS: member_added
-    GS-->>F: member_data
-    F-->>U: 201 Created + member_data
-```
+    U->>F: POST /token
+    F->>A: authenticate_user()
+    A->>C: get_user_by_email()
+    C->>D: SELECT users WHERE email
+    D-->>C: user_data
+    C-->>A: user_with_hash
+    A->>A: verify_password()
+    A->>A: create_access_token()
+    A-->>F: JWT_token
+    F-->>U: 200 OK + access_token
+``` 
+
 **Expense Creation and Splitting Flow**
 ```mermaid
 sequenceDiagram
