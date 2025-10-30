@@ -15,7 +15,6 @@ PROJECT-PG12/(tbf)
 ├── requirements.txt        # Python dependencies
 └── README.md               # Project documentation
 
-```
 # Project PG12 - Documentation
 
 ## 1. System Architecture and Object-Oriented Modelling
